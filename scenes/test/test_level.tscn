@@ -1,0 +1,27 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scenes/characters/mario/mario.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/gui/state.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/tilemaps/floor1_tilemap.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/stage/left_area.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/stage/principal_floor.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/stage/right_area.tscn" type="PackedScene" id=6]
+
+[node name="Test Level" type="Node2D"]
+
+[node name="State" parent="." instance=ExtResource( 2 )]
+
+[node name="PrincipalFloor" parent="." instance=ExtResource( 5 )]
+
+[node name="Areas" type="Node2D" parent="."]
+
+[node name="LeftArea" parent="Areas" instance=ExtResource( 4 )]
+
+[node name="RightArea" parent="Areas" instance=ExtResource( 6 )]
+
+[node name="Tilemaps" type="Node2D" parent="."]
+
+[node name="Floor1Tilemap" parent="Tilemaps" instance=ExtResource( 3 )]
+
+[node name="Mario" parent="." instance=ExtResource( 1 )]
+position = Vector2( 160, 200 )
