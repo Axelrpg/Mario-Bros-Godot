@@ -27,6 +27,6 @@ tile_data = PoolIntArray( 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0
 tile_data = PoolIntArray( 1376291, 0, 0 )
 
 [node name="Mario" parent="." instance=ExtResource( 1 )]
-position = Vector2( 40, 216 )
+position = Vector2( 61, 208 )
 
 [node name="State" parent="." instance=ExtResource( 2 )]

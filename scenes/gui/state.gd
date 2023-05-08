@@ -2,7 +2,7 @@ extends CanvasLayer
 
 onready var label = $Label
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	match Global.mario_state:
 		0:
 			label.text = "idle"
@@ -12,3 +12,5 @@ func _physics_process(delta):
 			label.text = "jump"
 		3:
 			label.text = "run"
+		4:
+			label.text = "die"

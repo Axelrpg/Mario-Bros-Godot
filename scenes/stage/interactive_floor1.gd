@@ -7,3 +7,7 @@ func _ready():
 
 func blow():
 	animation.play("blow")
+
+func _on_DamageArea_body_entered(body):
+	if body.is_in_group("enemy"):
+		body.vulnerable()

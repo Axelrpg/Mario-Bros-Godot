@@ -16,10 +16,13 @@ enum {
 	WALK,
 	JUMP,
 	RUN,
+	DIE,
 }
 
 const FLOOR = Vector2(0,-1)
 const GRAVITY = 16
+
+var is_dying = false
 
 var jump = 360
 var min_jump = 360
@@ -31,10 +34,12 @@ var max_speed = 140
 
 onready var motion = Vector2.ZERO
 
-func _physics_process(delta):
-	jump_ctrl()
-	motion_ctrl()
-	run_ctrl()
+func _physics_process(_delta):
+	if is_dying == false:
+		jump_ctrl()
+		motion_ctrl()
+		run_ctrl()
+		
 	Global.mario_state = state
 	
 func get_axis():
@@ -107,10 +112,14 @@ func state_ctrl(new_state):
 			animation.play("jump")
 		RUN:
 			animation.playback_speed = 2
+		DIE:
+			animation.play("die")
 			
 func die():
-	print("Moritessss")
+	is_dying = true
+	state_ctrl(DIE)
 
 func _on_HeadArea_body_entered(body):
 	if body.is_in_group("floor"):
 		body.blow()
+
