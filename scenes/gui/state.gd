@@ -10,3 +10,5 @@ func _physics_process(delta):
 			label.text = "walk"
 		2:
 			label.text = "jump"
+		3:
+			label.text = "run"

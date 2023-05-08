@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/floor1.png-515f6c0df7a0c4e0f8dd01f28a666065.stex"
+path="res://.import/enemies.png-61d7adde44e4c1011a69bf2e800648c6.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/stage/multiple_floor1/floor1.png"
-dest_files=[ "res://.import/floor1.png-515f6c0df7a0c4e0f8dd01f28a666065.stex" ]
+source_file="res://sprites/characters/enemies/enemies.png"
+dest_files=[ "res://.import/enemies.png-61d7adde44e4c1011a69bf2e800648c6.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

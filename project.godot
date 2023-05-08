@@ -61,11 +61,9 @@ p1_down={
 
 [layer_names]
 
-2d_physics/layer_1="World"
-2d_physics/layer_2="Player"
-2d_physics/layer_3="Enemy"
-2d_physics/layer_4="Points"
-2d_physics/layer_5="Floor"
+2d_physics/layer_1="Player"
+2d_physics/layer_2="Enemy"
+2d_physics/layer_3="Interactive_floor"
 
 [physics]
 

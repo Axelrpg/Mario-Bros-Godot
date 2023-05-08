@@ -15,21 +15,26 @@ enum {
 	IDLE,
 	WALK,
 	JUMP,
-	BEND
+	RUN,
 }
 
 const FLOOR = Vector2(0,-1)
 const GRAVITY = 16
 
 var jump = 360
+var min_jump = 360
+var max_jump = 400
 
 var speed = 100
+var min_speed = 70
+var max_speed = 140
 
 onready var motion = Vector2.ZERO
 
 func _physics_process(delta):
 	jump_ctrl()
 	motion_ctrl()
+	run_ctrl()
 	Global.mario_state = state
 	
 func get_axis():
@@ -71,8 +76,27 @@ func motion_ctrl():
 		
 	motion = move_and_slide(motion, FLOOR)
 	
+func run_ctrl():
+	if is_on_floor():
+		if Input.is_action_pressed(p1_run):
+			if speed < max_speed:
+				speed += 2
+			if jump < max_jump:
+				jump += 1
+				
+			if speed == max_speed:
+				state_ctrl(RUN)
+		else:
+			if speed > min_speed:
+				speed -= 2
+			if jump > min_jump:
+				jump -= 1
+	
 func state_ctrl(new_state):
 	state = new_state
+	
+	if state != RUN:
+		animation.playback_speed = 1
 	
 	match state:
 		IDLE:
@@ -81,8 +105,11 @@ func state_ctrl(new_state):
 			animation.play("walk")
 		JUMP:
 			animation.play("jump")
-		BEND:
-			animation.play("bend")
+		RUN:
+			animation.playback_speed = 2
+			
+func die():
+	print("Moritessss")
 
 func _on_HeadArea_body_entered(body):
 	if body.is_in_group("floor"):
