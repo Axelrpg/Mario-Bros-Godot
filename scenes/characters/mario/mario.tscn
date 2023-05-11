@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://sprites/characters/mario/mario.png" type="Texture" id=1]
 [ext_resource path="res://scenes/characters/mario/mario.gd" type="Script" id=2]
@@ -281,6 +281,9 @@ tracks/2/keys = {
 [sub_resource type="RectangleShape2D" id=17]
 extents = Vector2( 6, 1 )
 
+[sub_resource type="RectangleShape2D" id=21]
+extents = Vector2( 8, 11.5 )
+
 [node name="Mario" type="KinematicBody2D" groups=["player"]]
 collision_layer = 13
 collision_mask = 13
@@ -310,4 +313,14 @@ collision_mask = 4
 position = Vector2( 0, -8 )
 shape = SubResource( 17 )
 
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2( 0, 0.5 )
+shape = SubResource( 21 )
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="body_entered" from="HeadArea" to="." method="_on_HeadArea_body_entered"]
+[connection signal="body_entered" from="Hitbox" to="." method="_on_Hitbox_body_entered"]

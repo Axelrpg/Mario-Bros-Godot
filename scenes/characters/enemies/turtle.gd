@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 onready var animation = $AnimationPlayer
+onready var collision = $CollisionShape2D
 onready var sprite = $Sprite
 
 var state
@@ -9,6 +10,7 @@ enum {
 	WALK,
 	SPIN,
 	VULNERABLE,
+	DIE,
 }
 
 const FLOOR = Vector2(0,-1)
@@ -30,7 +32,7 @@ func _physics_process(_delta):
 func motion_ctrl():
 	motion.y += GRAVITY
 	
-	if state == WALK:
+	if state == WALK || state == DIE:
 		motion.x = speed
 	elif state == VULNERABLE and is_on_floor():
 		motion.x = 0
@@ -52,6 +54,27 @@ func state_ctrl(new_state):
 			animation.play("spin")
 		VULNERABLE:
 			animation.play("vulnerable")
+		DIE:
+			animation.play("die2")
+			
+func die(player_position):
+	if state == VULNERABLE:
+		if player_position.x > position.x and sprite.flip_h:
+			speed *= -1
+		elif player_position.x < position.x and sprite.flip_h == false:
+			speed *= -1
+		
+		impulse()
+		state_ctrl(DIE)
+		
+func flip_sprite(value: bool):
+	match value:
+		true:
+			scale.x = 1
+			speed *= 1
+		false:
+			scale.x = -1
+			speed *= -1
 			
 func impulse():
 	motion.y -= 250
@@ -78,7 +101,7 @@ func vulnerable():
 			impulse()
 			yield(get_tree().create_timer(0.1),"timeout")
 			state_ctrl(WALK)
-		yield(get_tree().create_timer(0.4),"timeout")
+		yield(get_tree().create_timer(0.45),"timeout")
 		can_vulnerable = true
 		
 func wait_time(time : int):
@@ -96,3 +119,6 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 func _on_DamageArea_body_entered(body):
 	if body.is_in_group("player"):
 		body.die()
+
+func _on_VisibilityNotifier2D_screen_exited():
+	queue_free()

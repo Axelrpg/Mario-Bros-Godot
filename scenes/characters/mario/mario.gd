@@ -123,3 +123,14 @@ func _on_HeadArea_body_entered(body):
 	if body.is_in_group("floor"):
 		body.blow()
 
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	match anim_name:
+		"die":
+			if get_tree().reload_current_scene() != OK:
+				print("Fallo al recargar la escena")
+
+
+func _on_Hitbox_body_entered(body):
+	if body.is_in_group("enemy"):
+		body.die(position)
