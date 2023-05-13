@@ -313,14 +313,14 @@ collision_mask = 4
 position = Vector2( 0, -8 )
 shape = SubResource( 17 )
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="DamageArea" type="Area2D" parent="."]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="DamageCollision" type="CollisionShape2D" parent="DamageArea"]
 position = Vector2( 0, 0.5 )
 shape = SubResource( 21 )
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="body_entered" from="HeadArea" to="." method="_on_HeadArea_body_entered"]
-[connection signal="body_entered" from="Hitbox" to="." method="_on_Hitbox_body_entered"]
+[connection signal="body_entered" from="DamageArea" to="." method="_on_DamageArea_body_entered"]

@@ -34,6 +34,11 @@ var max_speed = 140
 
 onready var motion = Vector2.ZERO
 
+
+func _ready():
+	state_ctrl(IDLE)
+
+
 func _physics_process(_delta):
 	if is_dying == false:
 		jump_ctrl()
@@ -42,20 +47,21 @@ func _physics_process(_delta):
 		
 	Global.mario_state = state
 	
+
 func get_axis():
 	var axis = Vector2.ZERO
 	axis.x = int(Input.is_action_pressed(p1_right)) - int(Input.is_action_pressed(p1_left))
 	return axis
 			
+
 func jump_ctrl():
 	if is_on_floor():
 		
-		var axis = Vector2.ZERO
-		axis = get_axis()
+		var axis = get_axis()
 		
 		if axis.x != 0:
 			state_ctrl(WALK)
-		else:
+		elif axis.x == 0:
 			state_ctrl(IDLE)
 		
 		if Input.is_action_pressed(p1_jump):
@@ -64,6 +70,7 @@ func jump_ctrl():
 	else:
 		state_ctrl(JUMP)
 	
+
 func motion_ctrl():
 	motion.y += GRAVITY
 	
@@ -81,6 +88,7 @@ func motion_ctrl():
 		
 	motion = move_and_slide(motion, FLOOR)
 	
+
 func run_ctrl():
 	if is_on_floor():
 		if Input.is_action_pressed(p1_run):
@@ -97,6 +105,7 @@ func run_ctrl():
 			if jump > min_jump:
 				jump -= 1
 	
+
 func state_ctrl(new_state):
 	state = new_state
 	
@@ -115,13 +124,20 @@ func state_ctrl(new_state):
 		DIE:
 			animation.play("die")
 			
+
 func die():
 	is_dying = true
 	state_ctrl(DIE)
+	
 
 func _on_HeadArea_body_entered(body):
 	if body.is_in_group("floor"):
 		body.blow()
+		
+
+func _on_DamageArea_body_entered(body):
+	if body.is_in_group("enemy"):
+		body.die(position)
 
 
 func _on_AnimationPlayer_animation_finished(anim_name):
@@ -130,7 +146,3 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 			if get_tree().reload_current_scene() != OK:
 				print("Fallo al recargar la escena")
 
-
-func _on_Hitbox_body_entered(body):
-	if body.is_in_group("enemy"):
-		body.die(position)
