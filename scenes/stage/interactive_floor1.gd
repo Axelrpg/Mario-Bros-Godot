@@ -10,7 +10,7 @@ func blow():
 
 func _on_DamageArea_body_entered(body):
 	if body.is_in_group("enemy"):
-		body.vulnerable()
+		body.blow()
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	match anim_name:
