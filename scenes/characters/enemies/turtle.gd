@@ -66,6 +66,7 @@ func state_ctrl(new_state):
 			vulnerable_time.start()
 		DIE:
 			animation.play("die")
+			Global.turtle -= 1
 			
 			
 func blow(blow_position : Vector2):

@@ -2,6 +2,8 @@ extends Node2D
 
 export var spawn_time : int = 10
 
+export var number_turtles : int = 3
+
 onready var left_animation = $LeftPipe/LeftAnimationPlayer
 onready var left_position = $Positions/LeftPosition
 
@@ -15,6 +17,8 @@ var Turtle = load("res://scenes/characters/enemies/turtle.tscn")
 func _ready():
 	timer.wait_time = spawn_time
 	timer.start()
+	
+	Global.turtle = number_turtles
 
 
 func spawn_left():
@@ -47,8 +51,9 @@ func _on_RightAnimationPlayer_animation_finished(anim_name):
 
 
 func _on_SpawnTimer_timeout():
-	var num = Global.random(1, 10)
-	if num < 5:
-		left_animation.play("active")
-	else:
-		right_animation.play("active")
+	if Global.turtle > 0:
+		var num = Global.random(1, 10)
+		if num < 5:
+			left_animation.play("active")
+		else:
+			right_animation.play("active")
