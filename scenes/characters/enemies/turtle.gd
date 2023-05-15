@@ -21,13 +21,16 @@ var can_impulse = true
 var can_spin = true
 var can_vulnerable = true
 
-var speed = -50
+var speed = 50
 
 onready var motion = Vector2.ZERO
 
 
 func _ready():
 	state_ctrl(WALK)
+	yield(get_tree().create_timer(1), "timeout")
+	set_collision_layer_bit(4, false)
+	set_collision_mask_bit(4, false)
 
 
 func _physics_process(_delta):
@@ -37,9 +40,7 @@ func _physics_process(_delta):
 func motion_ctrl():
 	motion.y += GRAVITY
 	
-	if state == WALK || state == DIE:
-		motion.x = speed
-	elif state == VULNERABLE and is_on_floor():
+	if state == VULNERABLE and is_on_floor():
 		motion.x = 0
 		
 		
@@ -56,6 +57,7 @@ func state_ctrl(new_state):
 	
 	match state:
 		WALK:
+			motion.x = speed
 			animation.play("walk")
 		SPIN:
 			animation.play("spin")
@@ -66,11 +68,26 @@ func state_ctrl(new_state):
 			animation.play("die")
 			
 			
-func blow():
+func blow(blow_position : Vector2):
 	if can_impulse:
 		can_impulse = false
-		impulse()
+		
+		match state:
+			WALK:
+				if blow_position.x < position.x:
+					impulse_walk(1)
+				else:
+					impulse_walk(-1)
+			VULNERABLE:
+				if blow_position.x < position.x:
+					impulse_vulnerable(1)
+				elif blow_position.x > position.x:
+					impulse_vulnerable(-1)
+				else:
+					impulse()
+		
 		yield(get_tree().create_timer(0.1), "timeout")
+		
 		match state:
 			WALK:
 				state_ctrl(VULNERABLE)
@@ -79,24 +96,66 @@ func blow():
 				state_ctrl(WALK)
 				scale.y *= -1
 
+func change_direction():
+	speed *= -1
+
 
 func die(player_position : Vector2):
 	if state == VULNERABLE:
-		impulse()
 		state_ctrl(DIE)
-		match sprite.flip_h:
-			false:
-				if player_position.x < position.x:
-					speed *= -1
-			true:
-				if player_position.x > position.x:
-					speed *= -1
-
-
+		
+		if player_position.x < position.x:
+			impulse_die(1)
+		else:
+			impulse_die(-1)
+			
+			
 func impulse():
-	motion.y -= 250
-	yield(get_tree().create_timer(0.4), "timeout")
+	motion.y -= 225
+	yield(get_tree().create_timer(0.5), "timeout")
 	can_impulse = true
+
+
+func impulse_die(value : int):
+	match value:
+		1:
+			motion.x += 100
+		-1:
+			motion.x -= 100
+	
+	motion.y -= 225
+
+
+func impulse_vulnerable(value : int):
+	match value:
+		1:
+			motion.x += 100
+			speed = 50
+			sprite.flip_h = true
+		-1:
+			motion.x -= 100
+			speed = -50
+			sprite.flip_h = false
+			
+	impulse()
+
+
+func impulse_walk(value : int):
+	match value:
+		1:
+			match sprite.flip_h:
+				true:
+					pass
+				false:
+					motion.x += 100
+		-1:
+			match sprite.flip_h:
+				true:
+					motion.x -= 100
+				false:
+					pass
+	
+	impulse()
 
 
 func spin_body():
@@ -105,11 +164,11 @@ func spin_body():
 	
 func spin_sprite():
 	speed *= -1
-	match sprite.flip_h:
+	match $Sprite.flip_h:
 		true:
-			sprite.flip_h = false
+			$Sprite.flip_h = false
 		false:
-			sprite.flip_h = true
+			$Sprite.flip_h = true
 
 
 func _on_AnimationPlayer_animation_finished(anim_name):
@@ -132,4 +191,4 @@ func _on_VisibilityNotifier2D_screen_exited():
 
 
 func _on_VulnerableTime_timeout():
-	blow()
+	blow(position)

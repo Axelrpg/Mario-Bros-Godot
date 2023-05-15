@@ -285,6 +285,7 @@ extents = Vector2( 6, 1 )
 extents = Vector2( 8, 11.5 )
 
 [node name="Mario" type="KinematicBody2D" groups=["player"]]
+z_index = 2
 collision_layer = 13
 collision_mask = 13
 script = ExtResource( 2 )

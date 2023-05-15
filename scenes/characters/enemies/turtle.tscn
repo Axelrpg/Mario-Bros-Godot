@@ -1,25 +1,10 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://sprites/characters/enemies/turtle.png" type="Texture" id=1]
 [ext_resource path="res://scenes/characters/enemies/turtle.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 5 )
-
-[sub_resource type="Animation" id=12]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:rotation_degrees")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 10.0 ]
-}
 
 [sub_resource type="Animation" id=7]
 resource_name = "die"
@@ -275,12 +260,13 @@ tracks/4/keys = {
 extents = Vector2( 10, 6 )
 
 [node name="Turtle" type="KinematicBody2D" groups=["enemy"]]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 18
+collision_mask = 18
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
+flip_h = true
 hframes = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -289,7 +275,6 @@ shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 reset_on_save = false
-anims/RESET = SubResource( 12 )
 anims/die = SubResource( 7 )
 anims/spin = SubResource( 8 )
 anims/spin2 = SubResource( 9 )
@@ -310,7 +295,7 @@ position = Vector2( 0, 5.36442e-07 )
 scale = Vector2( 0.8, 0.8 )
 
 [node name="VulnerableTime" type="Timer" parent="."]
-wait_time = 10.0
+wait_time = 5.0
 one_shot = true
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
