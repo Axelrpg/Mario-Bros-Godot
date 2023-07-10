@@ -3,7 +3,7 @@
 [ext_resource path="res://sprites/stage/pipe/pipe.png" type="Texture" id=1]
 [ext_resource path="res://scenes/stage/pipes.gd" type="Script" id=2]
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="Animation" id=8]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -15,12 +15,12 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ 0 ]
+"values": [ 3 ]
 }
 
 [sub_resource type="Animation" id=2]
 resource_name = "active"
-length = 0.6
+length = 0.8
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
@@ -28,10 +28,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 0, 1, 2, 0 ]
+"values": [ 0, 1, 2, 3, 0 ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -107,14 +107,13 @@ script = ExtResource( 2 )
 z_index = 1
 
 [node name="Sprite" type="Sprite" parent="LeftPipe"]
-position = Vector2( 28, 0 )
+position = Vector2( 32, 0 )
 texture = ExtResource( 1 )
-flip_h = true
-vframes = 3
+vframes = 4
 
 [node name="LeftAnimationPlayer" type="AnimationPlayer" parent="LeftPipe"]
 reset_on_save = false
-anims/RESET = SubResource( 1 )
+anims/RESET = SubResource( 8 )
 anims/active = SubResource( 2 )
 anims/idle = SubResource( 3 )
 
@@ -123,7 +122,7 @@ collision_layer = 16
 collision_mask = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPipe/StaticBody2D"]
-position = Vector2( 48, 4 )
+position = Vector2( 56, 4 )
 shape = SubResource( 4 )
 
 [node name="RightPipe" type="Node2D" parent="."]
@@ -131,9 +130,10 @@ position = Vector2( 264, 0 )
 z_index = 1
 
 [node name="Sprite" type="Sprite" parent="RightPipe"]
-position = Vector2( 28, 0 )
+position = Vector2( 24, 0 )
 texture = ExtResource( 1 )
-vframes = 3
+flip_h = true
+vframes = 4
 
 [node name="RightAnimationPlayer" type="AnimationPlayer" parent="RightPipe"]
 reset_on_save = false
@@ -146,16 +146,16 @@ collision_layer = 16
 collision_mask = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightPipe/StaticBody2D"]
-position = Vector2( 8, 4 )
+position = Vector2( 0, 4 )
 shape = SubResource( 4 )
 
 [node name="Positions" type="Node2D" parent="."]
 
 [node name="LeftPosition" type="Position2D" parent="Positions"]
-position = Vector2( 48, -8 )
+position = Vector2( 56, -8 )
 
 [node name="RightPosition" type="Position2D" parent="Positions"]
-position = Vector2( 272, -8 )
+position = Vector2( 264, -8 )
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 10.0

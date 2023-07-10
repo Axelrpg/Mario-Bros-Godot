@@ -28,9 +28,13 @@ var jump = 360
 var min_jump = 360
 var max_jump = 400
 
-var speed = 100
-var min_speed = 70
-var max_speed = 140
+#Velocidad minima = 70
+#Velocidad maxima = 140
+var max_speed = 70
+
+var speed: float = 0.0
+var friction: float = 150
+var acceleration: float = 250
 
 onready var motion = Vector2.ZERO
 
@@ -39,10 +43,10 @@ func _ready():
 	state_ctrl(IDLE)
 
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	if is_dying == false:
 		jump_ctrl()
-		motion_ctrl()
+		motion_ctrl(delta)
 		run_ctrl()
 		
 	Global.mario_state = state
@@ -69,41 +73,42 @@ func jump_ctrl():
 			
 	else:
 		state_ctrl(JUMP)
-	
 
-func motion_ctrl():
+
+func motion_ctrl(delta):
 	motion.y += GRAVITY
 	
 	var axis = get_axis()
-		
+	
+	# Manejar la aceleración
 	if axis.x == 1:
 		sprite.flip_h = false
+		speed += acceleration * delta
 	elif axis.x == -1:
 		sprite.flip_h = true
-		
-	if axis.x != 0:
-		motion.x = axis.x * speed
-	else:
-		motion.x = 0
-		
+		speed -= acceleration * delta
+
+	# Aplicar fricción
+	if speed > 0:
+		speed = max(0, speed - friction * delta)
+	elif speed < 0:
+		speed = min(0, speed + friction * delta)
+
+	# Limitar la velocidad máxima
+	speed = clamp(speed, -max_speed, max_speed)
+	motion.x = speed
+
 	motion = move_and_slide(motion, FLOOR)
-	
+
 
 func run_ctrl():
 	if is_on_floor():
 		if Input.is_action_pressed(p1_run):
-			if speed < max_speed:
-				speed += 2
-			if jump < max_jump:
-				jump += 1
-				
-			if speed == max_speed:
-				state_ctrl(RUN)
+			if max_speed < 140:
+				max_speed += 2
 		else:
-			if speed > min_speed:
-				speed -= 2
-			if jump > min_jump:
-				jump -= 1
+			if max_speed > 70:
+				max_speed -= 2
 	
 
 func state_ctrl(new_state):
@@ -123,12 +128,12 @@ func state_ctrl(new_state):
 			animation.playback_speed = 2
 		DIE:
 			animation.play("die")
-			
+
 
 func die():
 	is_dying = true
 	state_ctrl(DIE)
-	
+
 
 func _on_HeadArea_body_entered(body):
 	if body.is_in_group("floor"):
@@ -146,3 +151,8 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 			if get_tree().reload_current_scene() != OK:
 				print("Fallo al recargar la escena")
 
+
+
+func _on_Area2D_body_entered(body):
+	if body is StaticBody2D:
+		print(body)

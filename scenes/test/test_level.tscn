@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/characters/mario/mario.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/gui/state.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://scenes/stage/right_area.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/tilemaps/turtle_tilemap.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/stage/pipes.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/stage/spawn_platform.tscn" type="PackedScene" id=9]
 
 [node name="Test Level" type="Node2D"]
 
@@ -31,6 +32,9 @@ position = Vector2( 0, 37 )
 spawn_time = 5
 
 [node name="Mario" parent="." instance=ExtResource( 1 )]
-position = Vector2( 72, 216 )
+position = Vector2( 160, 136 )
+
+[node name="SpawnPlatform" parent="." instance=ExtResource( 9 )]
+position = Vector2( 160, 160 )
 
 [node name="State" parent="." instance=ExtResource( 2 )]
