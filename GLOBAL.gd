@@ -2,9 +2,7 @@ extends Node
 
 onready var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
-var mario_state
-
-var turtle
+var turtle : int
 
 func _physics_process(_delta):
 	if Input.is_action_pressed("reset"):

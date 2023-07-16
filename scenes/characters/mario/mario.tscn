@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://sprites/characters/mario/mario.png" type="Texture" id=1]
 [ext_resource path="res://scenes/characters/mario/mario.gd" type="Script" id=2]
@@ -210,12 +210,15 @@ tracks/2/keys = {
 extents = Vector2( 6, 1 )
 
 [sub_resource type="RectangleShape2D" id=21]
-extents = Vector2( 8, 11.5 )
+extents = Vector2( 8, 11 )
+
+[sub_resource type="RectangleShape2D" id=23]
+extents = Vector2( 6, 1.5 )
 
 [node name="Mario" type="KinematicBody2D" groups=["player"]]
 z_index = 2
-collision_layer = 13
-collision_mask = 13
+collision_layer = 2
+collision_mask = 11
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -235,8 +238,7 @@ anims/jump = SubResource( 4 )
 anims/walk = SubResource( 5 )
 
 [node name="HeadArea" type="Area2D" parent="."]
-collision_layer = 4
-collision_mask = 4
+collision_layer = 2
 
 [node name="HeadCollision" type="CollisionShape2D" parent="HeadArea"]
 position = Vector2( 0, -8 )
@@ -245,12 +247,19 @@ disabled = true
 
 [node name="DamageArea" type="Area2D" parent="."]
 collision_layer = 2
-collision_mask = 2
+collision_mask = 4
 
 [node name="DamageCollision" type="CollisionShape2D" parent="DamageArea"]
-position = Vector2( 0, 0.5 )
 shape = SubResource( 21 )
+
+[node name="FloorArea" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="FootCollision" type="CollisionShape2D" parent="FloorArea"]
+position = Vector2( 0, 10.5 )
+shape = SubResource( 23 )
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="body_entered" from="HeadArea" to="." method="_on_HeadArea_body_entered"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_DamageArea_body_entered"]
+[connection signal="body_entered" from="FloorArea" to="." method="_on_FloorArea_body_entered"]

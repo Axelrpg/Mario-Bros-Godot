@@ -17,6 +17,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Global="*res://GLOBAL.gd"
+Global_Mario="*res://GLOBAL_MARIO.gd"
 
 [display]
 
@@ -120,12 +121,11 @@ reset={
 
 [layer_names]
 
-2d_physics/layer_1="Player"
-2d_physics/layer_2="Enemy"
-2d_physics/layer_3="Interactive_floor"
-2d_physics/layer_4="Enemy_to_player"
-2d_physics/layer_5="Enemy_spawn_plaftform"
-2d_physics/layer_6="Enemy_respawn_platform"
+2d_physics/layer_1="floor"
+2d_physics/layer_2="player"
+2d_physics/layer_3="enemy"
+2d_physics/layer_4="spawn_platform"
+2d_physics/layer_5="pipe_platform"
 
 [physics]
 

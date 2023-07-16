@@ -29,7 +29,6 @@ onready var motion = Vector2.ZERO
 func _ready():
 	state_ctrl(WALK)
 	yield(get_tree().create_timer(1), "timeout")
-	set_collision_layer_bit(4, false)
 	set_collision_mask_bit(4, false)
 
 
@@ -96,6 +95,7 @@ func blow(blow_position : Vector2):
 			VULNERABLE:
 				state_ctrl(WALK)
 				scale.y *= -1
+
 
 func change_direction():
 	speed *= -1

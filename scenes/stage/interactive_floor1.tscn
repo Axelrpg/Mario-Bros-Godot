@@ -67,8 +67,7 @@ tracks/1/keys = {
 extents = Vector2( 4, 1 )
 
 [node name="InteractiveFloor1" type="StaticBody2D" groups=["floor"]]
-collision_layer = 7
-collision_mask = 7
+collision_mask = 6
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -85,8 +84,7 @@ anims/blow = SubResource( 3 )
 anims/idle = SubResource( 4 )
 
 [node name="DamageArea" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 2
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DamageArea"]
 position = Vector2( 0, -3 )

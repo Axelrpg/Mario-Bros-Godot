@@ -9,6 +9,8 @@ var p1_run = "p1_run"
 onready var animation = $AnimationPlayer
 onready var sprite = $Sprite
 
+signal respawn
+
 var state
 
 enum {
@@ -23,6 +25,7 @@ const FLOOR = Vector2(0,-1)
 const GRAVITY = 16
 
 var is_dying = false
+var on_floor = true
 
 var jump = 360
 var min_jump = 360
@@ -49,7 +52,7 @@ func _physics_process(delta):
 		motion_ctrl(delta)
 		run_ctrl()
 		
-	Global.mario_state = state
+	Global_Mario.state = state
 	
 
 func get_axis():
@@ -59,7 +62,7 @@ func get_axis():
 			
 
 func jump_ctrl():
-	if is_on_floor():
+	if on_floor:
 		
 		var axis = get_axis()
 		
@@ -69,6 +72,7 @@ func jump_ctrl():
 			state_ctrl(IDLE)
 		
 		if Input.is_action_pressed(p1_jump):
+			on_floor = false
 			motion.y -= jump
 			
 	else:
@@ -102,13 +106,20 @@ func motion_ctrl(delta):
 
 
 func run_ctrl():
-	if is_on_floor():
-		if Input.is_action_pressed(p1_run):
-			if max_speed < 140:
-				max_speed += 2
-		else:
-			if max_speed > 70:
-				max_speed -= 2
+	if on_floor:
+		if Input.is_action_pressed(p1_left) || Input.is_action_pressed(p1_right):
+			if Input.is_action_pressed(p1_run):
+				if max_speed < 140:
+					max_speed += 2
+				
+				if max_speed > 105:
+					jump = max_jump
+			else:
+				if max_speed > 70:
+					max_speed -= 2
+				
+				if max_speed < 105:
+					jump = min_jump
 	
 
 func state_ctrl(new_state):
@@ -148,11 +159,16 @@ func _on_DamageArea_body_entered(body):
 func _on_AnimationPlayer_animation_finished(anim_name):
 	match anim_name:
 		"die":
-			if get_tree().reload_current_scene() != OK:
-				print("Fallo al recargar la escena")
+			if Global_Mario.lives > 0:
+				Global_Mario.lives -= 1
+				emit_signal("respawn")
+				queue_free()
+			else:
+				if get_tree().reload_current_scene() != OK:
+					print("Error al recargar la escena")
 
 
+func _on_FloorArea_body_entered(body):
+	if body.is_in_group("floor"):
+		on_floor = true
 
-func _on_Area2D_body_entered(body):
-	if body is StaticBody2D:
-		print(body)
