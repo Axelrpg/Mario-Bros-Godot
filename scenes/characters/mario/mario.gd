@@ -8,6 +8,7 @@ var p1_run = "p1_run"
 
 onready var animation = $AnimationPlayer
 onready var sprite = $Sprite
+onready var respawn_time = $RespawnTime
 
 signal respawn
 
@@ -23,6 +24,7 @@ enum {
 
 const FLOOR = Vector2(0,-1)
 const GRAVITY = 16
+const SNAP = Vector2(0, 5)
 
 var is_dying = false
 var on_floor = true
@@ -53,7 +55,12 @@ func _physics_process(delta):
 		run_ctrl()
 		
 	Global_Mario.state = state
-	
+
+
+func die():
+	is_dying = true
+	state_ctrl(DIE)
+
 
 func get_axis():
 	var axis = Vector2.ZERO
@@ -62,7 +69,7 @@ func get_axis():
 			
 
 func jump_ctrl():
-	if on_floor:
+	if is_on_floor():
 		
 		var axis = get_axis()
 		
@@ -102,11 +109,11 @@ func motion_ctrl(delta):
 	speed = clamp(speed, -max_speed, max_speed)
 	motion.x = speed
 
-	motion = move_and_slide(motion, FLOOR)
+	motion = move_and_slide_with_snap(motion, SNAP, FLOOR)
 
 
 func run_ctrl():
-	if on_floor:
+	if is_on_floor():
 		if Input.is_action_pressed(p1_left) || Input.is_action_pressed(p1_right):
 			if Input.is_action_pressed(p1_run):
 				if max_speed < 140:
@@ -141,34 +148,32 @@ func state_ctrl(new_state):
 			animation.play("die")
 
 
-func die():
-	is_dying = true
-	state_ctrl(DIE)
+func _on_AnimationPlayer_animation_finished(anim_name):
+	match anim_name:
+		"die":
+			if Global_Mario.lives > 0:
+				Global_Mario.lives -= 1
+				respawn_time.start()
+			else:
+				if get_tree().reload_current_scene() != OK:
+					print("Error al recargar la escena")
 
-
-func _on_HeadArea_body_entered(body):
-	if body.is_in_group("floor"):
-		body.blow()
-		
 
 func _on_DamageArea_body_entered(body):
 	if body.is_in_group("enemy"):
 		body.die(position)
 
 
-func _on_AnimationPlayer_animation_finished(anim_name):
-	match anim_name:
-		"die":
-			if Global_Mario.lives > 0:
-				Global_Mario.lives -= 1
-				emit_signal("respawn")
-				queue_free()
-			else:
-				if get_tree().reload_current_scene() != OK:
-					print("Error al recargar la escena")
-
-
 func _on_FloorArea_body_entered(body):
 	if body.is_in_group("floor"):
 		on_floor = true
 
+
+func _on_HeadArea_body_entered(body):
+	if body.is_in_group("floor"):
+		body.blow()
+
+
+func _on_RespawnTime_timeout():
+	emit_signal("respawn")
+	queue_free()

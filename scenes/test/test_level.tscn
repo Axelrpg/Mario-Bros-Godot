@@ -32,7 +32,15 @@ tile_data = PoolIntArray( 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0
 position = Vector2( 0, 37 )
 spawn_time = 5
 
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="SpawnLeft" type="Position2D" parent="Spawns"]
+position = Vector2( 96, 0 )
+
+[node name="SpawnRight" type="Position2D" parent="Spawns"]
+position = Vector2( 224, 0 )
+
 [node name="Mario" parent="." instance=ExtResource( 1 )]
-position = Vector2( 160, 184 )
+position = Vector2( 160, 64 )
 
 [node name="State" parent="." instance=ExtResource( 2 )]
