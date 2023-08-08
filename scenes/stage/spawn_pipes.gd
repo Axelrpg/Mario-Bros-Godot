@@ -27,14 +27,12 @@ func _ready():
 func spawn_left():
 	var turtle = Turtle.instance()
 	turtle.position = left_position.position
-	turtle.z_index = 0
 	enemies.add_child(turtle)
 	
 	
 func spawn_right():
 	var turtle = Turtle.instance()
 	turtle.position = right_position.position
-	turtle.z_index = 0
 	turtle.spin_sprite()
 	enemies.add_child(turtle)
 
@@ -56,6 +54,7 @@ func _on_RightAnimationPlayer_animation_finished(anim_name):
 func _on_SpawnTimer_timeout():
 	if Global.turtle > 0 and enemies.get_child_count() < maximum_enemies:
 		var num = Global.random(1, 10)
+		print(num)
 		if num < 5:
 			left_animation.play("active")
 		else:

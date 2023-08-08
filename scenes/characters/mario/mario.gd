@@ -28,7 +28,6 @@ const GRAVITY = 16
 const SNAP = Vector2(0, 5)
 
 var is_dying = false
-var on_floor = true
 
 var respawn_animation = false
 
@@ -79,7 +78,6 @@ func jump_ctrl():
 				state_ctrl(IDLE)
 		
 		if Input.is_action_pressed(p1_jump):
-			on_floor = false
 			motion.y -= jump
 			
 	else:
@@ -172,21 +170,17 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 					print("Error al recargar la escena")
 
 
-func _on_DamageArea_body_entered(body):
-	if body.is_in_group("enemy"):
-		body.die(position)
-
-
-func _on_FloorArea_body_entered(body):
-	if body.is_in_group("floor"):
-		on_floor = true
-
-
 func _on_HeadArea_body_entered(body):
 	if body.is_in_group("floor"):
 		body.blow()
+		
+
+func _on_HitArea_body_entered(body):
+	if body.is_in_group("enemy"):
+		body.die(position)
 
 
 func _on_RespawnTime_timeout():
 	emit_signal("respawn")
 	queue_free()
+

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://sprites/characters/enemies/turtle.png" type="Texture" id=1]
 [ext_resource path="res://scenes/characters/enemies/turtle.gd" type="Script" id=2]
@@ -20,6 +20,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [ 32 ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("HitArea/HitCollision:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
+}
 
 [sub_resource type="Animation" id=7]
 resource_name = "die"
@@ -37,7 +49,7 @@ tracks/0/keys = {
 "values": [ 0 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("DamageArea/DamageCollision:disabled")
+tracks/1/path = NodePath("HitArea/HitCollision:disabled")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -59,6 +71,59 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ 32 ]
+}
+
+[sub_resource type="Animation" id=13]
+resource_name = "reboot"
+length = 0.3
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:collision_mask")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 49 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("HitArea/HitCollision:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
 }
 
 [sub_resource type="Animation" id=8]
@@ -89,7 +154,7 @@ tracks/1/keys = {
 "values": [ false ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("DamageArea/DamageCollision:disabled")
+tracks/2/path = NodePath("HitArea/HitCollision:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -129,7 +194,7 @@ tracks/1/keys = {
 "values": [ false ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("DamageArea/DamageCollision:disabled")
+tracks/2/path = NodePath("HitArea/HitCollision:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -170,7 +235,7 @@ tracks/1/keys = {
 "values": [ false ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("DamageArea/DamageCollision:disabled")
+tracks/2/path = NodePath("HitArea/HitCollision:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -223,7 +288,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 2 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("DamageArea/DamageCollision:disabled")
+tracks/1/path = NodePath(".:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -231,11 +296,11 @@ tracks/1/enabled = true
 tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ false ]
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath(".:scale")
+tracks/2/path = NodePath(".:collision_mask")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -243,11 +308,11 @@ tracks/2/enabled = true
 tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 1, 1 ) ]
+"update": 1,
+"values": [ 49 ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath(".:collision_mask")
+tracks/3/path = NodePath("HitArea/HitCollision:disabled")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -256,7 +321,7 @@ tracks/3/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ 49 ]
+"values": [ false ]
 }
 
 [sub_resource type="RectangleShape2D" id=6]
@@ -280,16 +345,17 @@ shape = SubResource( 1 )
 reset_on_save = false
 anims/RESET = SubResource( 12 )
 anims/die = SubResource( 7 )
+anims/reboot = SubResource( 13 )
 anims/spin = SubResource( 8 )
 anims/spin2 = SubResource( 9 )
 anims/vulnerable = SubResource( 10 )
 anims/walk = SubResource( 11 )
 
-[node name="DamageArea" type="Area2D" parent="."]
+[node name="HitArea" type="Area2D" parent="."]
 collision_layer = 4
 collision_mask = 2
 
-[node name="DamageCollision" type="CollisionShape2D" parent="DamageArea"]
+[node name="HitCollision" type="CollisionShape2D" parent="HitArea"]
 position = Vector2( -7.95808e-13, 3 )
 rotation = 3.14159
 shape = SubResource( 6 )
@@ -311,7 +377,7 @@ wait_time = 5.0
 one_shot = true
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
-[connection signal="body_entered" from="DamageArea" to="." method="_on_DamageArea_body_entered"]
+[connection signal="body_entered" from="HitArea" to="." method="_on_HitArea_body_entered"]
 [connection signal="timeout" from="AdjustState" to="." method="_on_AdjustState_timeout"]
 [connection signal="timeout" from="DisableCollision" to="." method="_on_DisableCollision_timeout"]
 [connection signal="timeout" from="TimerImpulse" to="." method="_on_TimerImpulse_timeout"]

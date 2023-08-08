@@ -1,0 +1,180 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://sprites/stage/pipe/reboot_pipes.png" type="Texture" id=1]
+[ext_resource path="res://scenes/stage/reboot_pipes.gd" type="Script" id=2]
+
+[sub_resource type="Animation" id=1]
+resource_name = "idle"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "reboot"
+step = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 3, 2, 1, 0 ]
+}
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 8, 4 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 4, 16 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 4, 8 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 4, 8 )
+
+[sub_resource type="Animation" id=7]
+resource_name = "idle"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "reboot"
+step = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 3, 2, 1, 0 ]
+}
+
+[node name="RebootPipes" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="LeftPipe" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="LeftPipe"]
+position = Vector2( 20, 0 )
+texture = ExtResource( 1 )
+hframes = 4
+
+[node name="LeftAnimationPlayer" type="AnimationPlayer" parent="LeftPipe"]
+reset_on_save = false
+anims/idle = SubResource( 1 )
+anims/reboot = SubResource( 2 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="LeftPipe"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPipe/StaticBody2D"]
+position = Vector2( 32, 12 )
+shape = SubResource( 3 )
+
+[node name="LeftJumpArea" type="Area2D" parent="LeftPipe"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPipe/LeftJumpArea"]
+position = Vector2( 40, 0 )
+shape = SubResource( 4 )
+
+[node name="LeftRebootArea" type="Area2D" parent="LeftPipe"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPipe/LeftRebootArea"]
+position = Vector2( 28, 0 )
+shape = SubResource( 5 )
+
+[node name="LeftVanishingArea" type="Area2D" parent="LeftPipe"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPipe/LeftVanishingArea"]
+position = Vector2( 20, 0 )
+shape = SubResource( 6 )
+
+[node name="RightPipe" type="Node2D" parent="."]
+position = Vector2( 280, 0 )
+
+[node name="Sprite" type="Sprite" parent="RightPipe"]
+position = Vector2( 20, 0 )
+texture = ExtResource( 1 )
+flip_h = true
+hframes = 4
+
+[node name="RightAnimationPlayer" type="AnimationPlayer" parent="RightPipe"]
+reset_on_save = false
+anims/idle = SubResource( 7 )
+anims/reboot = SubResource( 8 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="RightPipe"]
+position = Vector2( 8, 16 )
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightPipe/StaticBody2D"]
+position = Vector2( 0, -4 )
+shape = SubResource( 3 )
+
+[node name="RightJumpArea" type="Area2D" parent="RightPipe"]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightPipe/RightJumpArea"]
+shape = SubResource( 4 )
+
+[node name="RightRebootArea" type="Area2D" parent="RightPipe"]
+position = Vector2( 8, 0 )
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightPipe/RightRebootArea"]
+position = Vector2( 4, 0 )
+shape = SubResource( 5 )
+
+[node name="RightVanishingArea" type="Area2D" parent="RightPipe"]
+position = Vector2( 16, 0 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightPipe/RightVanishingArea"]
+position = Vector2( 4, 0 )
+shape = SubResource( 6 )
+
+[connection signal="animation_finished" from="LeftPipe/LeftAnimationPlayer" to="." method="_on_LeftAnimationPlayer_animation_finished"]
+[connection signal="body_entered" from="LeftPipe/LeftJumpArea" to="." method="_on_LeftJumpArea_body_entered"]
+[connection signal="body_entered" from="LeftPipe/LeftRebootArea" to="." method="_on_LeftRebootArea_body_entered"]
+[connection signal="body_entered" from="LeftPipe/LeftVanishingArea" to="." method="_on_LeftVanishingArea_body_entered"]
+[connection signal="animation_finished" from="RightPipe/RightAnimationPlayer" to="." method="_on_LeftAnimationPlayer_animation_finished"]
+[connection signal="body_entered" from="RightPipe/RightJumpArea" to="." method="_on_RightJumpArea_body_entered"]
+[connection signal="body_entered" from="RightPipe/RightRebootArea" to="." method="_on_RightRebootArea_body_entered"]
+[connection signal="body_entered" from="RightPipe/RightVanishingArea" to="." method="_on_RightVanishingArea_body_entered"]

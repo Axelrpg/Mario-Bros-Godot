@@ -5,6 +5,7 @@ export var speed = 25
 onready var adjust_state = $AdjustState
 onready var animation = $AnimationPlayer
 onready var collision = $CollisionShape2D
+onready var hit_area = $HitArea/HitCollision
 onready var sprite = $Sprite
 onready var timer_impulse = $TimerImpulse
 onready var vulnerable_time = $VulnerableTime
@@ -16,6 +17,7 @@ enum {
 	SPIN,
 	VULNERABLE,
 	DIE,
+	REBOOT,
 }
 
 const FLOOR = Vector2(0, -1)
@@ -72,6 +74,8 @@ func state_ctrl(new_state):
 			vulnerable_time.start()
 		DIE:
 			animation.play("die")
+		REBOOT:
+			animation.play("reboot")
 			
 			
 func blow(blow_position : Vector2):
@@ -164,6 +168,11 @@ func impulse_walk(value : int):
 	impulse()
 
 
+func reboot():
+	motion.y -= 200
+	state_ctrl(REBOOT)
+
+
 func spin_body():
 	can_spin = false
 	state_ctrl(SPIN)
@@ -200,25 +209,19 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 			can_spin = true
 
 
-func _on_DamageArea_body_entered(body):
-	if body.is_in_group("player"):
-		body.die()
-
-
 func _on_DisableCollision_timeout():
 	set_collision_mask_bit(4, false)
+	
+	
+func _on_HitArea_body_entered(body):
+	if body.is_in_group("player"):
+		body.die()
 	
 	
 func _on_TimerImpulse_timeout():
 	can_impulse = true
 
 
-func _on_VisibilityNotifier2D_screen_exited():
-	#queue_free()
-	pass
-
-
 func _on_VulnerableTime_timeout():
 	if state == VULNERABLE:
 		blow(position)
-
