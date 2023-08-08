@@ -6,21 +6,6 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 6, 8.5 )
 
-[sub_resource type="Animation" id=22]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("HeadArea/HeadCollision:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ true ]
-}
-
 [sub_resource type="Animation" id=20]
 resource_name = "die"
 length = 3.0
@@ -165,6 +150,22 @@ tracks/2/keys = {
 "values": [ false ]
 }
 
+[sub_resource type="Animation" id=24]
+resource_name = "respawn"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 10 ]
+}
+
 [sub_resource type="Animation" id=5]
 resource_name = "walk"
 length = 0.3
@@ -231,10 +232,10 @@ shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 reset_on_save = false
-anims/RESET = SubResource( 22 )
 anims/die = SubResource( 20 )
 anims/idle = SubResource( 19 )
 anims/jump = SubResource( 4 )
+anims/respawn = SubResource( 24 )
 anims/walk = SubResource( 5 )
 
 [node name="HeadArea" type="Area2D" parent="."]
@@ -264,6 +265,24 @@ shape = SubResource( 23 )
 [node name="RespawnTime" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 0.75, 0.75 )
+limit_left = 0
+limit_top = 0
+limit_right = 320
+limit_bottom = 248
+limit_smoothed = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = true
+smoothing_speed = 25.0
+drag_margin_left = 0.3
+drag_margin_top = 0.3
+drag_margin_right = 0.3
+drag_margin_bottom = 0.3
+editor_draw_drag_margin = true
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="body_entered" from="HeadArea" to="." method="_on_HeadArea_body_entered"]

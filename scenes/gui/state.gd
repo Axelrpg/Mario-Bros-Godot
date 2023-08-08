@@ -1,6 +1,7 @@
 extends CanvasLayer
 
-onready var label = $Label
+onready var label = $Mario
+onready var turtle = $Turtle
 
 func _physics_process(_delta):
 	match Global_Mario.state:
@@ -14,3 +15,13 @@ func _physics_process(_delta):
 			label.text = "run"
 		4:
 			label.text = "die"
+			
+	match Global_Turtle.state:
+		0:
+			turtle.text = "walk"
+		1:
+			turtle.text = "spin"
+		2:
+			turtle.text = "vulnerable"
+		3:
+			turtle.text = "die"

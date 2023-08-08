@@ -20,14 +20,17 @@ enum {
 	JUMP,
 	RUN,
 	DIE,
+	RESPAWN,
 }
 
-const FLOOR = Vector2(0,-1)
+const FLOOR = Vector2(0, -1)
 const GRAVITY = 16
 const SNAP = Vector2(0, 5)
 
 var is_dying = false
 var on_floor = true
+
+var respawn_animation = false
 
 var jump = 360
 var min_jump = 360
@@ -57,11 +60,6 @@ func _physics_process(delta):
 	Global_Mario.state = state
 
 
-func die():
-	is_dying = true
-	state_ctrl(DIE)
-
-
 func get_axis():
 	var axis = Vector2.ZERO
 	axis.x = int(Input.is_action_pressed(p1_right)) - int(Input.is_action_pressed(p1_left))
@@ -74,15 +72,18 @@ func jump_ctrl():
 		var axis = get_axis()
 		
 		if axis.x != 0:
+			respawn_animation = false
 			state_ctrl(WALK)
 		elif axis.x == 0:
-			state_ctrl(IDLE)
+			if respawn_animation == false:
+				state_ctrl(IDLE)
 		
 		if Input.is_action_pressed(p1_jump):
 			on_floor = false
 			motion.y -= jump
 			
 	else:
+		respawn_animation = false
 		state_ctrl(JUMP)
 
 
@@ -146,6 +147,18 @@ func state_ctrl(new_state):
 			animation.playback_speed = 2
 		DIE:
 			animation.play("die")
+		RESPAWN:
+			animation.play("respawn")
+
+
+func activate_respawn_animation():
+	respawn_animation = true
+	state_ctrl(RESPAWN)
+
+
+func die():
+	is_dying = true
+	state_ctrl(DIE)
 
 
 func _on_AnimationPlayer_animation_finished(anim_name):

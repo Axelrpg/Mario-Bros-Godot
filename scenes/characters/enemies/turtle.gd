@@ -1,8 +1,12 @@
 extends KinematicBody2D
 
+export var speed = 25
+
+onready var adjust_state = $AdjustState
 onready var animation = $AnimationPlayer
 onready var collision = $CollisionShape2D
 onready var sprite = $Sprite
+onready var timer_impulse = $TimerImpulse
 onready var vulnerable_time = $VulnerableTime
 
 var state
@@ -14,26 +18,28 @@ enum {
 	DIE,
 }
 
-const FLOOR = Vector2(0,-1)
+const FLOOR = Vector2(0, -1)
 const GRAVITY = 16
 
 var can_impulse = true
 var can_spin = true
 var can_vulnerable = true
 
-var speed = 50
+var speed_value
 
 onready var motion = Vector2.ZERO
 
 
 func _ready():
 	state_ctrl(WALK)
-	yield(get_tree().create_timer(1), "timeout")
-	set_collision_mask_bit(4, false)
+	
+	speed_value = speed
 
 
 func _physics_process(_delta):
 	motion_ctrl()
+	
+	Global_Turtle.state = state
 	
 
 func motion_ctrl():
@@ -41,15 +47,16 @@ func motion_ctrl():
 	
 	if state == VULNERABLE and is_on_floor():
 		motion.x = 0
+	elif state == WALK and is_on_floor():
+		motion.x = speed
 		
 		
 	if is_on_wall() and can_spin and state == WALK:
-		can_spin = false
 		spin_body()
 		
 	
-	motion = move_and_slide(motion, FLOOR)
-	
+	motion = move_and_slide(motion, FLOOR, true)
+
 
 func state_ctrl(new_state):
 	state = new_state
@@ -65,7 +72,6 @@ func state_ctrl(new_state):
 			vulnerable_time.start()
 		DIE:
 			animation.play("die")
-			Global.turtle -= 1
 			
 			
 func blow(blow_position : Vector2):
@@ -76,8 +82,10 @@ func blow(blow_position : Vector2):
 			WALK:
 				if blow_position.x < position.x:
 					impulse_walk(1)
-				else:
+				elif blow_position.x > position.x:
 					impulse_walk(-1)
+				else:
+					impulse()
 			VULNERABLE:
 				if blow_position.x < position.x:
 					impulse_vulnerable(1)
@@ -86,15 +94,7 @@ func blow(blow_position : Vector2):
 				else:
 					impulse()
 		
-		yield(get_tree().create_timer(0.1), "timeout")
-		
-		match state:
-			WALK:
-				state_ctrl(VULNERABLE)
-				scale.y *= -1
-			VULNERABLE:
-				state_ctrl(WALK)
-				scale.y *= -1
+		adjust_state.start()
 
 
 func change_direction():
@@ -112,30 +112,33 @@ func die(player_position : Vector2):
 			
 			
 func impulse():
-	motion.y -= 225
-	yield(get_tree().create_timer(0.5), "timeout")
-	can_impulse = true
+	if is_on_floor():
+		motion.y -= 225
+	else:
+		motion.y -= 550
+	
+	timer_impulse.start()
 
 
 func impulse_die(value : int):
 	match value:
 		1:
-			motion.x += 100
+			motion.x += 50
 		-1:
-			motion.x -= 100
+			motion.x -= 50
 	
-	motion.y -= 225
+	impulse()
 
 
 func impulse_vulnerable(value : int):
 	match value:
 		1:
-			motion.x += 100
-			speed = 50
+			motion.x += 50
+			speed = speed_value
 			sprite.flip_h = true
 		-1:
-			motion.x -= 100
-			speed = -50
+			motion.x -= 50
+			speed = -speed_value
 			sprite.flip_h = false
 			
 	impulse()
@@ -148,11 +151,13 @@ func impulse_walk(value : int):
 				true:
 					pass
 				false:
-					motion.x += 100
+					spin_sprite()
+					motion.x += 50
 		-1:
 			match sprite.flip_h:
 				true:
-					motion.x -= 100
+					spin_sprite()
+					motion.x -= 50
 				false:
 					pass
 	
@@ -160,6 +165,7 @@ func impulse_walk(value : int):
 
 
 func spin_body():
+	can_spin = false
 	state_ctrl(SPIN)
 	
 	
@@ -172,8 +178,20 @@ func spin_sprite():
 			$Sprite.flip_h = true
 
 
+func _on_AdjustState_timeout():
+	match state:
+			WALK:
+				state_ctrl(VULNERABLE)
+				scale.y *= -1
+			VULNERABLE:
+				state_ctrl(WALK)
+				scale.y *= -1
+
+
 func _on_AnimationPlayer_animation_finished(anim_name):
 	match anim_name:
+		"die":
+			Global.turtle -= 1
 		"spin":
 			animation.play("spin2")
 			spin_sprite()
@@ -187,9 +205,20 @@ func _on_DamageArea_body_entered(body):
 		body.die()
 
 
+func _on_DisableCollision_timeout():
+	set_collision_mask_bit(4, false)
+	
+	
+func _on_TimerImpulse_timeout():
+	can_impulse = true
+
+
 func _on_VisibilityNotifier2D_screen_exited():
-	queue_free()
+	#queue_free()
+	pass
 
 
 func _on_VulnerableTime_timeout():
-	blow(position)
+	if state == VULNERABLE:
+		blow(position)
+
