@@ -107,7 +107,7 @@ collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPipe/LeftJumpArea"]
-position = Vector2( 40, 0 )
+position = Vector2( 44, 0 )
 shape = SubResource( 4 )
 
 [node name="LeftRebootArea" type="Area2D" parent="LeftPipe"]
@@ -152,6 +152,7 @@ collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightPipe/RightJumpArea"]
+position = Vector2( -4, 0 )
 shape = SubResource( 4 )
 
 [node name="RightRebootArea" type="Area2D" parent="RightPipe"]

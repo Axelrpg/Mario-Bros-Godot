@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-export var speed = 25
+export var speed: int = 25
 
 onready var adjust_state = $AdjustState
 onready var animation = $AnimationPlayer
@@ -20,6 +20,14 @@ enum {
 	REBOOT,
 }
 
+var skin
+
+enum {
+	RED,
+	GREEN,
+	BLUE
+}
+
 const FLOOR = Vector2(0, -1)
 const GRAVITY = 16
 
@@ -28,20 +36,27 @@ var can_spin = true
 var can_vulnerable = true
 
 var speed_value
+var speed_green = speed * 2
+var speed_blue = speed * 3
 
 onready var motion = Vector2.ZERO
 
 
 func _ready():
-	state_ctrl(WALK)
-	
 	speed_value = speed
+	
+	skin_ctrl(RED)
+	state_ctrl(WALK)
 
 
 func _physics_process(_delta):
 	motion_ctrl()
 	
 	Global_Turtle.state = state
+	print(speed)
+	
+	if Global.is_last == true:
+		skin_ctrl(BLUE)
 	
 
 func motion_ctrl():
@@ -60,12 +75,25 @@ func motion_ctrl():
 	motion = move_and_slide(motion, FLOOR, true)
 
 
+func skin_ctrl(new_skin):
+	skin = new_skin
+	
+	match skin:
+		RED:
+			sprite.texture = load("res://sprites/characters/enemies/turtle_red.png")
+		GREEN:
+			sprite.texture = load("res://sprites/characters/enemies/turtle_green.png")
+			speed = speed_green
+		BLUE:
+			sprite.texture = load("res://sprites/characters/enemies/turtle_blue.png")
+			speed = speed_blue
+
+
 func state_ctrl(new_state):
 	state = new_state
 	
 	match state:
 		WALK:
-			motion.x = speed
 			animation.play("walk")
 		SPIN:
 			animation.play("spin")
@@ -76,8 +104,8 @@ func state_ctrl(new_state):
 			animation.play("die")
 		REBOOT:
 			animation.play("reboot")
-			
-			
+
+
 func blow(blow_position : Vector2):
 	if can_impulse:
 		can_impulse = false
@@ -101,8 +129,8 @@ func blow(blow_position : Vector2):
 		adjust_state.start()
 
 
-func change_direction():
-	speed *= -1
+func change_to_blue():
+	skin_ctrl(BLUE)
 
 
 func die(player_position : Vector2):
@@ -169,8 +197,22 @@ func impulse_walk(value : int):
 
 
 func reboot():
-	motion.y -= 200
 	state_ctrl(REBOOT)
+	
+	match skin:
+		RED:
+			motion.y -= 200
+		GREEN:
+			motion.y -= 175
+		BLUE:
+			motion.y -= 150
+	
+	if speed > 0:
+		speed = 50
+	else:
+		speed = -50
+		
+	Global_Turtle.cont += 1
 
 
 func spin_body():
@@ -199,8 +241,6 @@ func _on_AdjustState_timeout():
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	match anim_name:
-		"die":
-			Global.turtle -= 1
 		"spin":
 			animation.play("spin2")
 			spin_sprite()
@@ -225,3 +265,6 @@ func _on_TimerImpulse_timeout():
 func _on_VulnerableTime_timeout():
 	if state == VULNERABLE:
 		blow(position)
+	
+	if skin == RED:
+		skin_ctrl(GREEN)

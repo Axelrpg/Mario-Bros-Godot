@@ -45,14 +45,13 @@ position = Vector2( 224, -24 )
 [node name="SpawnPipes" parent="Pipes" instance=ExtResource( 8 )]
 position = Vector2( 0, 32 )
 spawn_time = 3
-number_turtles = 10
-maximum_enemies = 10
+number_turtles = 2
 
 [node name="RebootPipes" parent="Pipes" instance=ExtResource( 11 )]
 position = Vector2( 0, 216 )
 
 [node name="Mario" parent="." instance=ExtResource( 1 )]
-position = Vector2( 304, 216 )
+position = Vector2( 56, 216 )
 z_index = 0
 
 [node name="State" parent="." instance=ExtResource( 2 )]

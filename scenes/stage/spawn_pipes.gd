@@ -14,6 +14,9 @@ onready var right_position = $Positions/RightPosition
 onready var enemies = $Enemies
 
 onready var timer = $SpawnTimer
+onready var subtract_turtle = $SubtractTurtle
+
+var is_last = false
 
 var Turtle = load("res://scenes/characters/enemies/turtle.tscn")
 
@@ -21,7 +24,17 @@ func _ready():
 	timer.wait_time = spawn_time
 	timer.start()
 	
-	Global.turtle = number_turtles
+	Global_Turtle.cont = number_turtles
+	
+	
+func _physics_process(_delta):
+	if Global_Turtle.cont == 0 and enemies.get_child_count() == 1:
+		if is_last == false:
+			is_last = true
+			Global.is_last = true
+
+	print(Global_Turtle.cont)
+	print(enemies.get_child_count())
 
 
 func spawn_left():
@@ -52,10 +65,16 @@ func _on_RightAnimationPlayer_animation_finished(anim_name):
 
 
 func _on_SpawnTimer_timeout():
-	if Global.turtle > 0 and enemies.get_child_count() < maximum_enemies:
+	if Global_Turtle.cont > 0 and enemies.get_child_count() < maximum_enemies:
+		
 		var num = Global.random(1, 10)
-		print(num)
 		if num < 5:
 			left_animation.play("active")
 		else:
 			right_animation.play("active")
+			
+		subtract_turtle.start()
+
+
+func _on_SubtractTurtle_timeout():
+	Global_Turtle.cont -= 1

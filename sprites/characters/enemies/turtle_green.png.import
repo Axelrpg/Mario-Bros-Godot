@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/turtle.png-b8c0bb049512a4d2cbc5fdfec274f447.stex"
+path="res://.import/turtle_green.png-1b80cb4ddd971f49b9f9d55a91f981c2.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/characters/enemies/turtle.png"
-dest_files=[ "res://.import/turtle.png-b8c0bb049512a4d2cbc5fdfec274f447.stex" ]
+source_file="res://sprites/characters/enemies/turtle_green.png"
+dest_files=[ "res://.import/turtle_green.png-1b80cb4ddd971f49b9f9d55a91f981c2.stex" ]
 
 [params]
 

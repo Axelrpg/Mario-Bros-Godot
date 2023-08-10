@@ -2,7 +2,7 @@ extends Node
 
 onready var rng : RandomNumberGenerator = RandomNumberGenerator.new()
 
-var turtle : int
+var is_last = false
 
 func _physics_process(_delta):
 	if Input.is_action_pressed("reset"):

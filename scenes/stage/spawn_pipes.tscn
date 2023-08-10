@@ -160,8 +160,12 @@ position = Vector2( 264, -8 )
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 10.0
 
+[node name="SubtractTurtle" type="Timer" parent="."]
+one_shot = true
+
 [node name="Enemies" type="Node2D" parent="."]
 
 [connection signal="animation_finished" from="LeftPipe/LeftAnimationPlayer" to="." method="_on_LeftAnimationPlayer_animation_finished"]
 [connection signal="animation_finished" from="RightPipe/RightAnimationPlayer" to="." method="_on_RightAnimationPlayer_animation_finished"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
+[connection signal="timeout" from="SubtractTurtle" to="." method="_on_SubtractTurtle_timeout"]
