@@ -128,6 +128,7 @@ reset={
 2d_physics/layer_4="spawn_platform"
 2d_physics/layer_5="pipe_platform"
 2d_physics/layer_6="down_area"
+2d_physics/layer_7="reboot_pipe"
 
 [physics]
 

@@ -32,9 +32,9 @@ func _physics_process(_delta):
 		if is_last == false:
 			is_last = true
 			Global.is_last = true
-
-	print(Global_Turtle.cont)
-	print(enemies.get_child_count())
+			
+	#print(Global_Turtle.cont)
+	#print(enemies.get_child_count())
 
 
 func spawn_left():
@@ -46,8 +46,8 @@ func spawn_left():
 func spawn_right():
 	var turtle = Turtle.instance()
 	turtle.position = right_position.position
-	turtle.spin_sprite()
 	enemies.add_child(turtle)
+	turtle.spin_sprite()
 
 
 func _on_LeftAnimationPlayer_animation_finished(anim_name):

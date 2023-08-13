@@ -11,6 +11,7 @@ func _on_LeftAnimationPlayer_animation_finished(anim_name):
 
 func _on_LeftJumpArea_body_entered(body):
 	if body.is_in_group("enemy"):
+		print("a")
 		body.reboot()
 
 

@@ -161,6 +161,7 @@ position = Vector2( 264, -8 )
 wait_time = 10.0
 
 [node name="SubtractTurtle" type="Timer" parent="."]
+wait_time = 0.1
 one_shot = true
 
 [node name="Enemies" type="Node2D" parent="."]

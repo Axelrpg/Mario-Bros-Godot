@@ -95,30 +95,32 @@ anims/idle = SubResource( 1 )
 anims/reboot = SubResource( 2 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="LeftPipe"]
-collision_layer = 0
-collision_mask = 4
+collision_layer = 64
+collision_mask = 64
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPipe/StaticBody2D"]
 position = Vector2( 32, 12 )
 shape = SubResource( 3 )
 
 [node name="LeftJumpArea" type="Area2D" parent="LeftPipe"]
-collision_layer = 0
-collision_mask = 4
+collision_layer = 64
+collision_mask = 64
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPipe/LeftJumpArea"]
 position = Vector2( 44, 0 )
 shape = SubResource( 4 )
 
 [node name="LeftRebootArea" type="Area2D" parent="LeftPipe"]
-collision_layer = 0
-collision_mask = 4
+collision_layer = 64
+collision_mask = 64
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPipe/LeftRebootArea"]
 position = Vector2( 28, 0 )
 shape = SubResource( 5 )
 
 [node name="LeftVanishingArea" type="Area2D" parent="LeftPipe"]
+collision_layer = 64
+collision_mask = 64
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPipe/LeftVanishingArea"]
 position = Vector2( 20, 0 )
@@ -140,16 +142,16 @@ anims/reboot = SubResource( 8 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="RightPipe"]
 position = Vector2( 8, 16 )
-collision_layer = 0
-collision_mask = 4
+collision_layer = 64
+collision_mask = 64
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightPipe/StaticBody2D"]
 position = Vector2( 0, -4 )
 shape = SubResource( 3 )
 
 [node name="RightJumpArea" type="Area2D" parent="RightPipe"]
-collision_layer = 0
-collision_mask = 4
+collision_layer = 64
+collision_mask = 64
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightPipe/RightJumpArea"]
 position = Vector2( -4, 0 )
@@ -157,8 +159,8 @@ shape = SubResource( 4 )
 
 [node name="RightRebootArea" type="Area2D" parent="RightPipe"]
 position = Vector2( 8, 0 )
-collision_layer = 0
-collision_mask = 4
+collision_layer = 64
+collision_mask = 64
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightPipe/RightRebootArea"]
 position = Vector2( 4, 0 )
@@ -166,6 +168,8 @@ shape = SubResource( 5 )
 
 [node name="RightVanishingArea" type="Area2D" parent="RightPipe"]
 position = Vector2( 16, 0 )
+collision_layer = 64
+collision_mask = 64
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightPipe/RightVanishingArea"]
 position = Vector2( 4, 0 )

@@ -14,3 +14,7 @@ func random(min_number, max_number):
 	rng.randomize()
 	var random = rng.randf_range(min_number, max_number)
 	return random
+
+
+func restart_last():
+	is_last = false

@@ -252,9 +252,10 @@ position = Vector2( 0, 0.5 )
 shape = SubResource( 21 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
+current = true
 zoom = Vector2( 0.75, 0.75 )
 limit_left = 0
-limit_top = -48
+limit_top = -40
 limit_right = 320
 limit_bottom = 248
 limit_smoothed = true

@@ -71,6 +71,18 @@ tracks/2/keys = {
 "update": 1,
 "values": [ 32 ]
 }
+tracks/3/type = "value"
+tracks/3/path = NodePath(".:collision_layer")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 4 ]
+}
 
 [sub_resource type="Animation" id=13]
 length = 0.3
@@ -317,12 +329,24 @@ tracks/3/keys = {
 "update": 1,
 "values": [ false ]
 }
+tracks/4/type = "value"
+tracks/4/path = NodePath(".:collision_layer")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 68 ]
+}
 
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 10, 7 )
 
 [node name="Turtle" type="KinematicBody2D" groups=["enemy"]]
-collision_layer = 4
+collision_layer = 68
 collision_mask = 49
 script = ExtResource( 2 )
 

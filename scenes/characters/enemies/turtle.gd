@@ -35,29 +35,30 @@ var can_impulse = true
 var can_spin = true
 var can_vulnerable = true
 
-var speed_value
-var speed_green = speed * 2
-var speed_blue = speed * 3
+var is_last = false
+
+var speed_red
+var speed_green
+var speed_blue
 
 onready var motion = Vector2.ZERO
 
 
 func _ready():
-	speed_value = speed
-	
 	skin_ctrl(RED)
 	state_ctrl(WALK)
+	set_speeds()
 
 
 func _physics_process(_delta):
 	motion_ctrl()
 	
 	Global_Turtle.state = state
-	print(speed)
 	
-	if Global.is_last == true:
+	if Global.is_last == true and is_last == false:
+		is_last = true
 		skin_ctrl(BLUE)
-	
+
 
 func motion_ctrl():
 	motion.y += GRAVITY
@@ -83,10 +84,18 @@ func skin_ctrl(new_skin):
 			sprite.texture = load("res://sprites/characters/enemies/turtle_red.png")
 		GREEN:
 			sprite.texture = load("res://sprites/characters/enemies/turtle_green.png")
-			speed = speed_green
+			
+			if speed > 0:
+				speed = speed_green
+			else:
+				speed = -speed_green
 		BLUE:
 			sprite.texture = load("res://sprites/characters/enemies/turtle_blue.png")
-			speed = speed_blue
+			
+			if speed > 0:
+				speed = speed_blue
+			else:
+				speed = -speed_blue
 
 
 func state_ctrl(new_state):
@@ -166,12 +175,20 @@ func impulse_vulnerable(value : int):
 	match value:
 		1:
 			motion.x += 50
-			speed = speed_value
 			sprite.flip_h = true
+			
+			if speed > 0:
+				pass
+			else:
+				speed *= -1
 		-1:
 			motion.x -= 50
-			speed = -speed_value
 			sprite.flip_h = false
+			
+			if speed > 0:
+				speed *= -1
+			else:
+				pass
 			
 	impulse()
 
@@ -215,6 +232,12 @@ func reboot():
 	Global_Turtle.cont += 1
 
 
+func set_speeds():
+	speed_red = speed
+	speed_green = speed * 2
+	speed_blue = speed * 3
+
+
 func spin_body():
 	can_spin = false
 	state_ctrl(SPIN)
@@ -222,6 +245,7 @@ func spin_body():
 	
 func spin_sprite():
 	speed *= -1
+	
 	match $Sprite.flip_h:
 		true:
 			$Sprite.flip_h = false
@@ -256,8 +280,8 @@ func _on_DisableCollision_timeout():
 func _on_HitArea_body_entered(body):
 	if body.is_in_group("player"):
 		body.die()
-	
-	
+
+
 func _on_TimerImpulse_timeout():
 	can_impulse = true
 
@@ -266,5 +290,5 @@ func _on_VulnerableTime_timeout():
 	if state == VULNERABLE:
 		blow(position)
 	
-	if skin == RED:
+	if skin == RED and state == VULNERABLE:
 		skin_ctrl(GREEN)

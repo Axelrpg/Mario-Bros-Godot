@@ -11,6 +11,7 @@ func _ready():
 	Global_Mario.lives = mario_lives
 	
 	connect_signal()
+	Global.restart_last()
 
 
 func connect_signal():
